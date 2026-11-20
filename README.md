@@ -2,7 +2,7 @@
 
 **Instructor-approved practice with spaced repetition.** StudyLoop turns an instructor's own course material into practice items that the instructor reviews and approves, then schedules reviews for each learner with a deterministic spaced-repetition algorithm.
 
-> **Status:** early development, following a 6-week roadmap (see below). No application code yet. The project uses only synthetic course material and is intended for adult learners (18+).
+> **Status:** early development, following a 6-week roadmap (see below). The Laravel skeleton, local Docker stack, health check and the first piece of the scheduler package are in place; product features are not built yet. The project uses only synthetic course material and is intended for adult learners (18+).
 
 ## The problem
 
@@ -103,4 +103,12 @@ studyloop/
 
 ## Getting started
 
-Setup instructions will be added once the application is in place.
+Requirements: Docker with Compose v2. PHP, Composer and Node.js run inside containers.
+
+```bash
+scripts/setup.sh
+```
+
+This creates `.env`, installs dependencies, starts the app, Horizon, MySQL, Redis and Mailpit, runs migrations and builds assets, then checks `GET /health`. The app is served on http://localhost and Mailpit on http://localhost:8025.
+
+Quality checks (also run in CI): `composer lint` (Pint), `composer analyse` (Larastan) and `composer test` (Pest). See [docs/setup.md](docs/setup.md) for environment variables, everyday commands and troubleshooting. Demo accounts will be added together with sign-in and cohorts.

@@ -18,3 +18,11 @@ arch('controllers are suffixed')
     ->expect('App\Http\Controllers')
     ->classes()
     ->toHaveSuffix('Controller');
+
+arch('the scheduler package stays framework-free')
+    ->expect('StudyLoop\Scheduler')
+    ->not->toUse(['App', 'Illuminate', 'Laravel', 'Livewire', 'Carbon']);
+
+arch('the scheduler package declares strict types')
+    ->expect('StudyLoop\Scheduler')
+    ->toUseStrictTypes();

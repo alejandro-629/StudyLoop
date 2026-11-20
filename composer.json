@@ -4,12 +4,22 @@
     "type": "project",
     "description": "Instructor-approved practice items with per-learner spaced repetition.",
     "license": "proprietary",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "packages/scheduler",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require": {
         "php": "^8.3",
         "laravel/framework": "^12.0",
         "laravel/horizon": "^5.30",
         "laravel/tinker": "^2.10",
-        "livewire/livewire": "^3.6"
+        "livewire/livewire": "^3.6",
+        "studyloop/scheduler": "^0.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

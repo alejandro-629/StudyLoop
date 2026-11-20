@@ -9,5 +9,6 @@ parameters:
         - bootstrap/app.php
         - config/
         - database/
+        - packages/scheduler/src/
         - routes/
     tmpDir: storage/framework/cache/phpstan
