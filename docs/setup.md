@@ -70,10 +70,22 @@ All variables live in `.env` (never committed); `.env.example` has working defau
 | `MAIL_HOST` / `MAIL_PORT` | `mailpit` / `1025` | Mail is caught by Mailpit, never delivered. |
 | `APP_PORT`, `VITE_PORT`, `FORWARD_*_PORT` | `80`, `5173`, … | Host ports; change them if something else uses the default. |
 | `WWWUSER` / `WWWGROUP` | `1000` | Set by the setup script to your `id -u` / `id -g`. |
+| `STUDYLOOP_INVITATION_TTL_DAYS` | `7` | Lifetime of a cohort invitation link. |
+| `DEMO_PASSWORD` | empty | Password for the seeded demo accounts; generated and printed when empty. |
 
 ## Demo accounts
 
-There are no demo accounts yet: sign-in arrives together with organizations, cohorts and invitations. When it does, the seeder will create synthetic accounts for each role (org admin, instructor, TA and learner) and they will be listed here. All demo data is synthetic.
+The seeder creates two synthetic organizations and one account per role. All of them share the password from `DEMO_PASSWORD` in `.env`; if it is empty, the seeder generates one and prints it once. Re-running the seeder never changes an existing password.
+
+| Email | Organization | Role |
+|---|---|---|
+| `admin@studyloop.test` | Northwind Community College | Org admin |
+| `instructor@studyloop.test` | Northwind Community College | Instructor, BIO101 · Spring 2027 · Section A |
+| `ta@studyloop.test` | Northwind Community College | Teaching assistant, same cohort |
+| `learner@studyloop.test` | Northwind Community College | Learner, same cohort |
+| `other.learner@studyloop.test` | Harbor Tech Academy | Learner, NET110 · Spring 2027 · Evening |
+
+Sign in at http://localhost/login. The admin and the instructor can send invitations from **My cohorts → Invitations**; the emails land in Mailpit (http://localhost:8025). Invitation links are signed, work once and expire after `STUDYLOOP_INVITATION_TTL_DAYS` days (default 7). All demo data is synthetic.
 
 ## Troubleshooting
 

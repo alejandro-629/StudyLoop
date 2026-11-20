@@ -9,11 +9,10 @@ use Illuminate\Database\Seeder;
 final class DatabaseSeeder extends Seeder
 {
     /**
-     * Synthetic demo data only. Orgs, cohorts and demo accounts are added
-     * with the orgs module.
+     * Synthetic demo data only.
      */
     public function run(): void
     {
-        //
+        $this->call(DemoOrganizationsSeeder::class);
     }
 }

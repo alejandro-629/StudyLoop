@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use App\Enums\OrganizationRole;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+/**
+ * A user's membership of an organization (organization_user).
+ */
+final class Membership extends Pivot
+{
+    public $incrementing = true;
+
+    protected $table = 'organization_user';
+
+    /**
+     * @var list<string>
+     */
+    protected $fillable = [
+        'organization_id',
+        'user_id',
+        'role',
+    ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'role' => OrganizationRole::class,
+        ];
+    }
+}

@@ -45,4 +45,4 @@ Runs learning operations for a training company with several cohorts.
 | Review due items, open disputes | — | — | — | ✅ |
 | View cohort analytics (aggregates only) | ✅ | ✅ | ✅ | — |
 
-The role matrix is enforced by Policies when the orgs module lands; this table is the target, not the current state.
+Organizations, cohorts and invitations are enforced by Policies (`app/Policies`): org admins manage every cohort in their organization, instructors manage invitations for their own cohorts and may only invite TAs and learners, TAs and learners see only the cohorts they belong to, and nothing crosses organizations. The material, deck, dispute and analytics rows are still the target; they are enforced as those modules land.

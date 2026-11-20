@@ -26,3 +26,12 @@ arch('the scheduler package stays framework-free')
 arch('the scheduler package declares strict types')
     ->expect('StudyLoop\Scheduler')
     ->toUseStrictTypes();
+
+arch('policies, actions and models are final')
+    ->expect(['App\Policies', 'App\Actions', 'App\Models'])
+    ->classes()
+    ->toBeFinal();
+
+arch('enums are backed by strings')
+    ->expect('App\Enums')
+    ->toBeStringBackedEnums();
