@@ -1,0 +1,4 @@
+# Starts empty: new code must pass level 6 without ignores.
+# Regenerate only when raising the level: vendor/bin/phpstan analyse --generate-baseline
+parameters:
+    ignoreErrors: []
