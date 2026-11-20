@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Notifications;
 
 use App\Models\CohortInvitation;
+use App\Support\InvitationLinks;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\URL;
 
 final class CohortInvitationNotification extends Notification
 {
@@ -28,11 +28,7 @@ final class CohortInvitationNotification extends Notification
 
     public function url(): string
     {
-        return URL::temporarySignedRoute(
-            'invitations.show',
-            $this->invitation->expires_at,
-            ['invitation' => $this->invitation->id],
-        );
+        return InvitationLinks::url($this->invitation);
     }
 
     public function toMail(object $notifiable): MailMessage

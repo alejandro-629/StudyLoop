@@ -43,6 +43,7 @@ These are the same checks CI runs:
 ./vendor/bin/sail composer lint      # Pint, no changes allowed
 ./vendor/bin/sail composer analyse   # Larastan (level 6, empty baseline)
 ./vendor/bin/sail composer test      # Pest: Unit, Feature and Scheduler suites
+./vendor/bin/sail composer test:browser   # Pest browser suite (Playwright, see below)
 ./vendor/bin/sail npm run build      # Vite production build
 ```
 
@@ -53,6 +54,18 @@ cd packages/scheduler && composer install && vendor/bin/pest
 ```
 
 Tests use SQLite in memory and array cache/session/queue drivers (see `phpunit.xml`), so they need neither MySQL nor Redis. CI additionally runs every migration up, down and up again against MySQL 8.
+
+### Browser tests
+
+`tests/Browser` drives a real Chromium through Pest's browser plugin (Playwright). It needs the npm packages and a browser installed once:
+
+```bash
+./vendor/bin/sail npm install
+./vendor/bin/sail root-shell        # then: npx playwright install --with-deps chromium && exit
+./vendor/bin/sail composer test:browser
+```
+
+Screenshots of failing steps are written to `tests/Browser/Screenshots` (ignored by git; CI uploads them as an artifact).
 
 ## Environment variables
 
@@ -85,7 +98,7 @@ The seeder creates two synthetic organizations and one account per role. All of 
 | `learner@studyloop.test` | Northwind Community College | Learner, same cohort |
 | `other.learner@studyloop.test` | Harbor Tech Academy | Learner, NET110 · Spring 2027 · Evening |
 
-Sign in at http://localhost/login. The admin and the instructor can send invitations from **My cohorts → Invitations**; the emails land in Mailpit (http://localhost:8025). Invitation links are signed, work once and expire after `STUDYLOOP_INVITATION_TTL_DAYS` days (default 7). All demo data is synthetic.
+Sign in at http://localhost/login. The admin sees all of Northwind's courses and cohorts under **Organization**; the admin and the instructor can send invitations from there or from **My cohorts → Invitations**. People in more than one organization pick the current one in the header; the emails land in Mailpit (http://localhost:8025). Invitation links are signed, work once and expire after `STUDYLOOP_INVITATION_TTL_DAYS` days (default 7). All demo data is synthetic.
 
 ## Troubleshooting
 

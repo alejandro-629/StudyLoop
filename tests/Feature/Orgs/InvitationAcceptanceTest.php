@@ -6,14 +6,14 @@ use App\Enums\CohortRole;
 use App\Enums\OrganizationRole;
 use App\Models\CohortInvitation;
 use App\Models\User;
+use App\Support\InvitationLinks;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\URL;
 
 uses(RefreshDatabase::class);
 
 function invitationUrl(CohortInvitation $invitation, string $route = 'invitations.show'): string
 {
-    return URL::temporarySignedRoute($route, $invitation->expires_at, ['invitation' => $invitation->id]);
+    return InvitationLinks::path($invitation, $route);
 }
 
 /**

@@ -59,7 +59,54 @@ jobs:
         run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
 
       - name: Pest
-        run: vendor/bin/pest --colors=always
+        run: vendor/bin/pest --colors=always --exclude-testsuite=Browser
+
+  browser:
+    name: Browser tests (Pest + Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          coverage: none
+          tools: composer:v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Cache Composer downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.json', 'packages/*/composer.json') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate --ansi
+
+      - name: Pest browser suite
+        run: vendor/bin/pest --colors=always --testsuite=Browser
+
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-screenshots
+          path: tests/Browser/Screenshots
+          if-no-files-found: ignore
 
   migrations:
     name: Migrations on MySQL 8

@@ -13,21 +13,15 @@
         </a>
 
         <header class="border-b border-stone-200 bg-white">
-            <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-                <a href="{{ route('home') }}" class="text-lg font-semibold tracking-tight">{{ config('app.name', 'StudyLoop') }}</a>
-
-                <nav aria-label="{{ __('Account') }}" class="flex items-center gap-4 text-sm">
+            <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('home') }}" class="text-lg font-semibold tracking-tight">{{ config('app.name', 'StudyLoop') }}</a>
                     @auth
-                        <a href="{{ route('dashboard') }}" class="hover:underline">{{ __('My cohorts') }}</a>
-                        <span class="text-stone-500">{{ auth()->user()->name }}</span>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="rounded px-2 py-1 hover:bg-stone-100">{{ __('Sign out') }}</button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="hover:underline">{{ __('Sign in') }}</a>
+                        <livewire:organization-switcher />
                     @endauth
-                </nav>
+                </div>
+
+                <x-navigation />
             </div>
         </header>
 

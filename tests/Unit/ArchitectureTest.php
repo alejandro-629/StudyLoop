@@ -27,8 +27,8 @@ arch('the scheduler package declares strict types')
     ->expect('StudyLoop\Scheduler')
     ->toUseStrictTypes();
 
-arch('policies, actions and models are final')
-    ->expect(['App\Policies', 'App\Actions', 'App\Models'])
+arch('policies, actions, models, support classes and components are final')
+    ->expect(['App\Policies', 'App\Actions', 'App\Models', 'App\Support', 'App\Livewire'])
     ->classes()
     ->toBeFinal();
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\CohortInvitationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\OrganizationController;
 use App\Livewire\Auth\Login;
 use Illuminate\Support\Facades\Route;
 
@@ -18,8 +19,9 @@ Route::middleware('guest')->group(function (): void {
     Route::get('/login', Login::class)->name('login');
 });
 
-// Invitation links work signed in or out; the signature covers the expiry.
-Route::middleware('signed')->group(function (): void {
+// Invitation links work signed in or out; the signature covers the path,
+// the invitation id and the expiry (see App\Support\InvitationLinks).
+Route::middleware('signed:relative')->group(function (): void {
     Route::get('/invitations/{invitation}', [InvitationController::class, 'show'])
         ->name('invitations.show');
     Route::post('/invitations/{invitation}/accept', [InvitationController::class, 'accept'])
@@ -31,6 +33,9 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/logout', LogoutController::class)->name('logout');
 
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+    Route::get('/organizations/{organization:slug}', [OrganizationController::class, 'show'])
+        ->name('organizations.show');
 
     Route::scopeBindings()->group(function (): void {
         Route::get('/cohorts/{cohort}/invitations', [CohortInvitationController::class, 'index'])

@@ -10,7 +10,7 @@ use App\Models\Organization;
 use App\Models\User;
 use Tests\TestCase;
 
-pest()->extend(TestCase::class)->in('Feature');
+pest()->extend(TestCase::class)->in('Feature', 'Browser');
 
 /**
  * One organization with one course and cohort, an org admin and one

@@ -8,19 +8,21 @@ use App\Actions\Cohorts\AcceptCohortInvitation;
 use App\Actions\Cohorts\InvitationUnavailable;
 use App\Models\Cohort;
 use App\Models\CohortInvitation;
+use App\Models\Organization;
 use App\Models\User;
+use App\Support\CurrentOrganization;
+use App\Support\InvitationLinks;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\Rules\Password;
 
 /**
  * The public side of an invitation link. Both routes sit behind the
- * `signed` middleware, so a tampered or expired link never gets here.
+ * `signed:relative` middleware, so a tampered or expired link never gets here.
  */
 final class InvitationController extends Controller
 {
@@ -49,16 +51,16 @@ final class InvitationController extends Controller
         return view($user === null ? 'invitations.register' : 'invitations.accept', [
             'invitation' => $invitation,
             'cohort' => $cohort,
-            'acceptUrl' => URL::temporarySignedRoute(
-                'invitations.accept',
-                $invitation->expires_at,
-                ['invitation' => $invitation->id],
-            ),
+            'acceptUrl' => InvitationLinks::path($invitation, 'invitations.accept'),
         ]);
     }
 
-    public function accept(Request $request, CohortInvitation $invitation, AcceptCohortInvitation $accept): RedirectResponse|Response
-    {
+    public function accept(
+        Request $request,
+        CohortInvitation $invitation,
+        AcceptCohortInvitation $accept,
+        CurrentOrganization $current,
+    ): RedirectResponse|Response {
         /** @var User|null $user */
         $user = $request->user();
 
@@ -95,6 +97,10 @@ final class InvitationController extends Controller
         } catch (InvitationUnavailable $e) {
             return $this->unavailable($e);
         }
+
+        // Land in the organization of the cohort just joined.
+        $organizationId = Cohort::query()->findOrFail($invitation->cohort_id)->organizationId();
+        $current->switchTo($user, Organization::query()->findOrFail($organizationId));
 
         return redirect()
             ->route('dashboard')

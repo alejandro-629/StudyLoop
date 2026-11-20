@@ -1,6 +1,11 @@
 <x-layouts.app :title="__('My cohorts')">
     <section aria-labelledby="cohorts-heading" class="space-y-6">
-        <h1 id="cohorts-heading" class="text-2xl font-semibold tracking-tight">{{ __('My cohorts') }}</h1>
+        <div>
+            <h1 id="cohorts-heading" class="text-2xl font-semibold tracking-tight">{{ __('My cohorts') }}</h1>
+            @if ($organization !== null)
+                <p class="text-stone-600">{{ $organization->name }}</p>
+            @endif
+        </div>
 
         @if ($cohorts->isEmpty())
             <p class="text-stone-600">{{ __('You are not in any cohort yet. Open the invitation link from your instructor to join one.') }}</p>
