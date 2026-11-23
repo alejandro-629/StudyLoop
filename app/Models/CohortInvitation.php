@@ -10,11 +10,17 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * An invitation to join a cohort with a given role. The emailed link is a
  * signed URL that expires together with the invitation; the row records
  * whether it was accepted or revoked so a link only works once.
+ *
+ * @property CohortRole $role
+ * @property Carbon $expires_at
+ * @property Carbon|null $accepted_at
+ * @property Carbon|null $revoked_at
  */
 final class CohortInvitation extends Model
 {

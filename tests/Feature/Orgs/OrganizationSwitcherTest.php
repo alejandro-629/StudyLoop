@@ -5,9 +5,13 @@ declare(strict_types=1);
 use App\Enums\CohortRole;
 use App\Enums\OrganizationRole;
 use App\Livewire\OrganizationSwitcher;
+use App\Models\Cohort;
+use App\Models\CohortInvitation;
+use App\Models\Course;
 use App\Models\Organization;
 use App\Models\User;
 use App\Support\CurrentOrganization;
+use App\Support\InvitationLinks;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
@@ -93,8 +97,8 @@ it('refuses to switch to an organization the user does not belong to', function 
 
 it('ignores a stored organization the user no longer belongs to', function (): void {
     ['user' => $user, 'alpha' => $alpha, 'outside' => $outside] = memberOfTwoOrganizations();
-    $outsideCourse = App\Models\Course::factory()->for($outside)->create();
-    $outsideCohort = App\Models\Cohort::factory()->for($outsideCourse)->create();
+    $outsideCourse = Course::factory()->for($outside)->create();
+    $outsideCohort = Cohort::factory()->for($outsideCourse)->create();
 
     $this->actingAs($user)
         ->withSession([CurrentOrganization::SESSION_KEY => $outside->id])
@@ -117,7 +121,7 @@ it('shows the organization name instead of a menu for single-organization users'
 
 it('moves to the organization of a cohort just joined', function (): void {
     ['user' => $user, 'beta' => $beta] = memberOfTwoOrganizations();
-    $invitation = App\Models\CohortInvitation::factory()->for($beta['cohort'])->create([
+    $invitation = CohortInvitation::factory()->for($beta['cohort'])->create([
         'email' => $user->email,
         'role' => CohortRole::Learner,
         'invited_by' => $beta['admin']->id,
@@ -126,7 +130,7 @@ it('moves to the organization of a cohort just joined', function (): void {
 
     $this->actingAs($user)
         ->withSession([CurrentOrganization::SESSION_KEY => $user->organizations()->where('organizations.name', 'Alpha Institute')->value('organizations.id')])
-        ->post(App\Support\InvitationLinks::path($invitation, 'invitations.accept'))
+        ->post(InvitationLinks::path($invitation, 'invitations.accept'))
         ->assertRedirect(route('dashboard'))
         ->assertSessionHas(CurrentOrganization::SESSION_KEY, $beta['organization']->id);
 });

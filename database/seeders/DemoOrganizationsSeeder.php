@@ -38,12 +38,12 @@ final class DemoOrganizationsSeeder extends Seeder
         $created = [];
 
         foreach ([
-            ['admin@studyloop.test', 'Avery Admin', $northwind, OrganizationRole::Admin, null, null],
-            ['instructor@studyloop.test', 'Imani Instructor', $northwind, OrganizationRole::Member, $sectionA, CohortRole::Instructor],
-            ['ta@studyloop.test', 'Tomas Assistant', $northwind, OrganizationRole::Member, $sectionA, CohortRole::TeachingAssistant],
-            ['learner@studyloop.test', 'Lena Learner', $northwind, OrganizationRole::Member, $sectionA, CohortRole::Learner],
-            ['other.learner@studyloop.test', 'Omar Other-Org', $harbor, OrganizationRole::Member, $evening, CohortRole::Learner],
-        ] as [$email, $name, $organization, $orgRole, $cohort, $cohortRole]) {
+            ['admin@studyloop.test', 'Avery Admin', $northwind, OrganizationRole::Admin, null],
+            ['instructor@studyloop.test', 'Imani Instructor', $northwind, OrganizationRole::Member, [$sectionA, CohortRole::Instructor]],
+            ['ta@studyloop.test', 'Tomas Assistant', $northwind, OrganizationRole::Member, [$sectionA, CohortRole::TeachingAssistant]],
+            ['learner@studyloop.test', 'Lena Learner', $northwind, OrganizationRole::Member, [$sectionA, CohortRole::Learner]],
+            ['other.learner@studyloop.test', 'Omar Other-Org', $harbor, OrganizationRole::Member, [$evening, CohortRole::Learner]],
+        ] as [$email, $name, $organization, $orgRole, $enrollment]) {
             $user = User::query()->firstOrNew(['email' => $email]);
 
             if (! $user->exists) {
@@ -57,7 +57,9 @@ final class DemoOrganizationsSeeder extends Seeder
                 ['role' => $orgRole],
             );
 
-            if ($cohort !== null && $cohortRole !== null) {
+            if ($enrollment !== null) {
+                [$cohort, $cohortRole] = $enrollment;
+
                 Enrollment::query()->updateOrCreate(
                     ['cohort_id' => $cohort->id, 'user_id' => $user->id],
                     ['role' => $cohortRole],

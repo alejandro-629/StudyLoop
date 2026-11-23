@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * A user's membership of an organization (organization_user).
+ *
+ * @property OrganizationRole $role
  */
 final class Membership extends Pivot
 {

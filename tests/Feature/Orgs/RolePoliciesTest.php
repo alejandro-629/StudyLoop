@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\CohortRole;
 use App\Enums\OrganizationRole;
+use App\Models\Cohort;
 use App\Models\Course;
 use App\Models\Organization;
 use App\Models\User;
@@ -45,7 +46,7 @@ it('does not let TAs or learners manage invitations', function (string $who): vo
 
 it('gives an instructor no rights over another cohort of the same course', function (): void {
     ['instructor' => $instructor, 'course' => $course] = cohortWithStaff();
-    $otherCohort = App\Models\Cohort::factory()->for($course)->create();
+    $otherCohort = Cohort::factory()->for($course)->create();
 
     expect($instructor->can('view', $otherCohort))->toBeFalse()
         ->and($instructor->can('manageInvitations', $otherCohort))->toBeFalse();
@@ -87,6 +88,6 @@ it('rejects duplicate memberships, enrollments, course codes and cohort names', 
         ->toThrow(UniqueConstraintViolationException::class);
     expect(fn () => Course::factory()->for($organization)->create(['code' => $course->code]))
         ->toThrow(UniqueConstraintViolationException::class);
-    expect(fn () => App\Models\Cohort::factory()->for($course)->create(['name' => $cohort->name]))
+    expect(fn () => Cohort::factory()->for($course)->create(['name' => $cohort->name]))
         ->toThrow(UniqueConstraintViolationException::class);
 });

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * A user's role in one cohort (cohort_user).
+ *
+ * @property CohortRole $role
  */
 final class Enrollment extends Pivot
 {
