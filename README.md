@@ -2,7 +2,7 @@
 
 **Instructor-approved practice with spaced repetition.** StudyLoop turns an instructor's own course material into practice items that the instructor reviews and approves, then schedules reviews for each learner with a deterministic spaced-repetition algorithm.
 
-> **Status:** early development, following a 6-week roadmap (see below). No application code yet. The project uses only synthetic course material and is intended for adult learners (18+).
+> **Status:** early development, following a 6-week roadmap (see below). The Laravel skeleton, local Docker stack, health check, the first piece of the scheduler package, organizations, courses and cohorts with role policies, invitation-only sign-up and role-aware navigation are in place; course material, items and reviews are not built yet. The project uses only synthetic course material and is intended for adult learners (18+).
 
 ## The problem
 
@@ -94,7 +94,7 @@ studyloop/
 
 | Week | Focus | Status |
 |---|---|---|
-| Week 1 | **Laravel bootstrap, orgs & cohorts** — Add product charter, ADR 0001 and Laravel app with Docker services, add scheduler package, setup guide and CI workflow, add organizations, cohorts, role policies and invitations, add org switcher and role-aware navigation with access tests | Planned |
+| Week 1 | **Laravel bootstrap, orgs & cohorts** — Add product charter, ADR 0001 and Laravel app with Docker services, add scheduler package, setup guide and CI workflow, add organizations, cohorts, role policies and invitations, add org switcher and role-aware navigation with access tests | ✅ Done |
 | Week 2 | **Course material, item bank & decks** — Add versioned materials with parsing and source sections, add items with source spans and immutable deck versions, add item editor and deck builder | Planned |
 | Week 3 | **Review sessions & SM-2 scheduler** — Implement SM-2 with golden fixtures, add idempotent review submission and learner session, add deterministic grading and document scheduling math | Planned |
 | Week 4 | **Suggested items & live review** — Add item draft agent with span validation and review workbench, add provider config, token budgets and usage records, add live draft updates and co-reviewer presence | Planned |
@@ -103,4 +103,12 @@ studyloop/
 
 ## Getting started
 
-Setup instructions will be added once the application is in place.
+Requirements: Docker with Compose v2. PHP, Composer and Node.js run inside containers.
+
+```bash
+scripts/setup.sh
+```
+
+This creates `.env`, installs dependencies, starts the app, Horizon, MySQL, Redis and Mailpit, runs migrations and builds assets, then checks `GET /health`. The app is served on http://localhost and Mailpit on http://localhost:8025.
+
+Quality checks (also run in CI): `composer lint` (Pint), `composer analyse` (Larastan) and `composer test` (Pest). See [docs/setup.md](docs/setup.md) for environment variables, everyday commands and troubleshooting. Demo accounts will be added together with sign-in and cohorts.
