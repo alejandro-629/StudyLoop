@@ -87,6 +87,19 @@ final class User extends Authenticatable
         return $this->organizationRole($organization) === OrganizationRole::Admin;
     }
 
+    /**
+     * Whether the user is enrolled with one of the given roles in any
+     * cohort of the course.
+     */
+    public function hasCourseRole(Course $course, CohortRole ...$roles): bool
+    {
+        return Enrollment::query()
+            ->where('user_id', $this->id)
+            ->whereIn('role', array_map(fn (CohortRole $role): string => $role->value, $roles))
+            ->whereIn('cohort_id', Cohort::query()->select('id')->where('course_id', $course->id))
+            ->exists();
+    }
+
     public function cohortRole(Cohort $cohort): ?CohortRole
     {
         return Enrollment::query()

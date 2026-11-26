@@ -7,7 +7,10 @@
 
         @forelse ($courses as $course)
             <div class="space-y-3 rounded-lg border border-stone-200 bg-white p-4">
-                <h2 class="font-medium">{{ $course->code }} · {{ $course->title }}</h2>
+                <div class="flex items-center justify-between">
+                    <h2 class="font-medium">{{ $course->code }} · {{ $course->title }}</h2>
+                    <a href="{{ route('materials.index', $course) }}" class="text-sm font-medium hover:underline">{{ __('Materials') }}</a>
+                </div>
 
                 @if ($course->cohorts->isEmpty())
                     <p class="text-sm text-stone-600">{{ __('No cohorts yet.') }}</p>

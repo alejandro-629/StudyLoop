@@ -7,6 +7,7 @@ use App\Http\Controllers\CohortInvitationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\OrganizationController;
 use App\Livewire\Auth\Login;
 use Illuminate\Support\Facades\Route;
@@ -45,5 +46,15 @@ Route::middleware('auth')->group(function (): void {
             ->name('cohorts.invitations.store');
         Route::delete('/cohorts/{cohort}/invitations/{invitation}', [CohortInvitationController::class, 'destroy'])
             ->name('cohorts.invitations.destroy');
+
+        Route::get('/courses/{course}/materials', [MaterialController::class, 'index'])
+            ->name('materials.index');
+        Route::post('/courses/{course}/materials', [MaterialController::class, 'store'])
+            ->middleware('throttle:20,1')
+            ->name('materials.store');
+        Route::get('/courses/{course}/materials/{material}/versions/{version:version}', [MaterialController::class, 'show'])
+            ->name('materials.versions.show');
+        Route::get('/courses/{course}/materials/{material}/versions/{version:version}/sections', [MaterialController::class, 'sections'])
+            ->name('materials.versions.sections');
     });
 });

@@ -19,6 +19,7 @@
         "laravel/horizon": "^5.30",
         "laravel/tinker": "^2.10",
         "livewire/livewire": "^3.6",
+        "smalot/pdfparser": "^2.13",
         "studyloop/scheduler": "^0.1"
     },
     "require-dev": {

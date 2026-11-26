@@ -19,9 +19,14 @@
                                 {{ $cohort->name }} · {{ $cohort->course->organization->name }} · {{ $cohort->enrollment->role->label() }}
                             </p>
                         </div>
-                        @can('manageInvitations', $cohort)
-                            <a href="{{ route('cohorts.invitations.index', $cohort) }}" class="text-sm font-medium hover:underline">{{ __('Invitations') }}</a>
-                        @endcan
+                        <div class="flex gap-4">
+                            @can('viewMaterials', $cohort->course)
+                                <a href="{{ route('materials.index', $cohort->course) }}" class="text-sm font-medium hover:underline">{{ __('Materials') }}</a>
+                            @endcan
+                            @can('manageInvitations', $cohort)
+                                <a href="{{ route('cohorts.invitations.index', $cohort) }}" class="text-sm font-medium hover:underline">{{ __('Invitations') }}</a>
+                            @endcan
+                        </div>
                     </li>
                 @endforeach
             </ul>

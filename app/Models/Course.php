@@ -39,4 +39,12 @@ final class Course extends Model
     {
         return $this->hasMany(Cohort::class);
     }
+
+    /**
+     * @return HasMany<Material, $this>
+     */
+    public function materials(): HasMany
+    {
+        return $this->hasMany(Material::class);
+    }
 }

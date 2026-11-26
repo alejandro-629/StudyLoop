@@ -84,6 +84,11 @@ All variables live in `.env` (never committed); `.env.example` has working defau
 | `APP_PORT`, `VITE_PORT`, `FORWARD_*_PORT` | `80`, `5173`, … | Host ports; change them if something else uses the default. |
 | `WWWUSER` / `WWWGROUP` | `1000` | Set by the setup script to your `id -u` / `id -g`. |
 | `STUDYLOOP_INVITATION_TTL_DAYS` | `7` | Lifetime of a cohort invitation link. |
+| `STUDYLOOP_MATERIALS_DISK` | `local` | Filesystem disk for uploaded material (stored as `materials/<course>/<sha256>.<ext>`). |
+| `STUDYLOOP_MATERIALS_MAX_UPLOAD_KB` | `10240` | Largest accepted upload. PHP's `upload_max_filesize`/`post_max_size` must allow it too. |
+| `STUDYLOOP_MATERIALS_MAX_TEXT_CHARACTERS` | `500000` | Longest normalized text a version may have; longer files fail parsing. |
+| `STUDYLOOP_MATERIALS_MAX_PDF_PAGES` | `300` | PDFs with more pages fail parsing. |
+| `STUDYLOOP_MATERIALS_MAX_SECTION_CHARACTERS` | `6000` | Longer sections are split at paragraph breaks; applies to versions parsed afterwards. |
 | `DEMO_PASSWORD` | empty | Password for the seeded demo accounts; generated and printed when empty. |
 
 ## Demo accounts
@@ -98,7 +103,7 @@ The seeder creates two synthetic organizations and one account per role. All of 
 | `learner@studyloop.test` | Northwind Community College | Learner, same cohort |
 | `other.learner@studyloop.test` | Harbor Tech Academy | Learner, NET110 · Spring 2027 · Evening |
 
-Sign in at http://localhost/login. The admin sees all of Northwind's courses and cohorts under **Organization**; the admin and the instructor can send invitations from there or from **My cohorts → Invitations**. People in more than one organization pick the current one in the header; the emails land in Mailpit (http://localhost:8025). Invitation links are signed, work once and expire after `STUDYLOOP_INVITATION_TTL_DAYS` days (default 7). All demo data is synthetic.
+Sign in at http://localhost/login. The admin sees all of Northwind's courses and cohorts under **Organization**; the admin and the instructor can send invitations from there or from **My cohorts → Invitations**. Course material lives under **Materials** (on each course in **Organization** and on staff cohort cards): the admin and the instructor upload Markdown, text or PDF files there, parsing runs on the queue (Horizon), and each version opens in a section viewer with offsets and hash checks. TAs can read material; learners cannot. People in more than one organization pick the current one in the header; the emails land in Mailpit (http://localhost:8025). Invitation links are signed, work once and expire after `STUDYLOOP_INVITATION_TTL_DAYS` days (default 7). All demo data is synthetic.
 
 ## Troubleshooting
 
